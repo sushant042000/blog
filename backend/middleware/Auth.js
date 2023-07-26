@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
-const isAuthenticated = async (req, res, next) => {
+exports. isAuthenticated = async (req, res, next) => {
   const { token } = req.cookies;
 
   if (!token) {
@@ -12,7 +12,7 @@ const isAuthenticated = async (req, res, next) => {
 
   const decoded = await jwt.decode(token, process.env.JWT_SECRETE);
   const user = await User.findById({ _id: decoded.id });
-
+  
   if (!user) {
     return res.status(404).json({
       message: "user not found",
@@ -26,4 +26,16 @@ const isAuthenticated = async (req, res, next) => {
   next();
 };
 
-module.exports = isAuthenticated;
+
+
+exports.isAdmin = (req, res,next) => {
+    console.log("test",req.user.role);
+
+  if (req.user.role !== "admin") {
+    return res.status(401).json({
+      message: "only admin access this resource",
+    });
+  }
+  next();
+};
+
