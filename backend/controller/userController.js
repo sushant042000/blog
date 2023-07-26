@@ -97,3 +97,12 @@ exports.updateUserProfile = async (req, res) => {
     });
   }
 };
+
+exports.logout = async (req, res) => {
+  const options = {
+    expires: new Date(Date.now()),
+  };
+  return res.status(200).cookie("token", null, options).json({
+    message: "success",
+  });
+};
