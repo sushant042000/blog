@@ -1,3 +1,4 @@
+const Post = require("../models/postModel");
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
@@ -98,6 +99,14 @@ exports.updateUserProfile = async (req, res) => {
   }
 };
 
+exports.myposts = async (req, res) => {
+  const posts = await Post.find({ author: req.user._id });
+  return res.status(200).json({
+    success: "true",
+    posts,
+  });
+};
+
 exports.logout = async (req, res) => {
   const options = {
     expires: new Date(Date.now()),
@@ -106,3 +115,25 @@ exports.logout = async (req, res) => {
     message: "success",
   });
 };
+
+
+//admin
+
+exports.getAllUsers=async (req,res)=>{
+  try {
+    const data=await User.find();
+    const totalUsers=data.length;
+    return res.status(200).json({
+      success: "true",
+      totalUsers,
+      data,
+    });
+
+
+  } catch (error) {
+    return res.status(500).json({
+      error,
+    });
+    
+  }
+}
