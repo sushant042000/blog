@@ -43,7 +43,12 @@ exports.register = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    
+    if(!email || !password){
+      return res.status(500).json({
+        message:"please provide email and password"
+      })
+    }
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({
@@ -67,7 +72,7 @@ exports.loginUser = async (req, res) => {
       message: "success",
     });
   } catch (error) {
-    return res.status(500).json({
+   return res.status(500).json({
       error,
     });
   }
@@ -98,6 +103,16 @@ exports.updateUserProfile = async (req, res) => {
     });
   }
 };
+
+exports.getProfile=async(req,res)=>{
+  const user=await User.findById(req.user._id);
+  const userWithoutPassword=user.toObject();
+  delete userWithoutPassword['password'];
+  return res.status(200).json({
+    success:true,
+    data:userWithoutPassword
+  })
+}
 
 exports.myposts = async (req, res) => {
   const posts = await Post.find({ author: req.user._id });
