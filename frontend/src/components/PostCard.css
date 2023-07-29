@@ -1,0 +1,30 @@
+
+
+.postCard {
+    
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    padding: 16px;
+    width: 400px;
+    margin: 7px;
+  }
+  
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .image img {
+    max-width: 80%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  
+  .description {
+    font-size: 14px;
+    color: #555;
+  }
+  
