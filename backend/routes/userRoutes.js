@@ -2,7 +2,7 @@ const express=require("express");
 const router=express.Router()
 const { register, loginUser, updateUserProfile, logout, myposts, getAllUsers, getProfile } = require("../controller/userController");
 
-const { createPost, updatePost } = require("../controller/postsController");
+const { createPost, updatePost, allPosts } = require("../controller/postsController");
 const { isAuthenticated, isAdmin } = require("../middleware/Auth");
 
 
@@ -19,9 +19,10 @@ router.get('/admin/getAllUser',isAuthenticated,isAdmin,getAllUsers);
 
 
 //post
- router.post('/post/create',isAuthenticated,createPost);
+ router.post('/post/create',createPost);
  router.put('/post/update/:id',isAuthenticated,updatePost);
  router.get("/post/mypost",isAuthenticated,myposts);
+ router.get("/post/all",allPosts);
 
 
 

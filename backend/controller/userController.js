@@ -11,11 +11,16 @@ exports.register = async (req, res) => {
       password,
     });
 
-    const save = await user.save();
+    const data = await user.save();
+    const dataWithoutPassword=data.toObject();
+    delete dataWithoutPassword["password"];
 
-    res.status(200).json({
+    console.log(dataWithoutPassword);
+    
+
+    return res.status(201).json({
       success: "true",
-      data: save,
+      data: dataWithoutPassword,
     });
   } catch (error) {
     if (error.name === "ValidationError") {
@@ -23,18 +28,17 @@ exports.register = async (req, res) => {
       for (const field in error.errors) {
         validationErrors[field] = error.errors[field].message;
       }
-      res.status(400).json({
+      return res.status(400).json({
         validationErrors,
       });
     }
     if (error.code === 11000) {
-      res.status(400).json({
-        message: `Duplicate ${Object.keys(error.keyValue)} entered`,
+      return res.status(409).json({
+        message: `User already present with this ${Object.keys(error.keyValue)}  `,
       });
     }
 
-    console.log(error);
-    res.status(400).json({
+    return res.status(400).json({
       error,
     });
   }
@@ -43,11 +47,11 @@ exports.register = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    
-    if(!email || !password){
+
+    if (!email || !password) {
       return res.status(500).json({
-        message:"please provide email and password"
-      })
+        message: "please provide email and password",
+      });
     }
     const user = await User.findOne({ email });
     if (!user) {
@@ -72,7 +76,7 @@ exports.loginUser = async (req, res) => {
       message: "success",
     });
   } catch (error) {
-   return res.status(500).json({
+    return res.status(500).json({
       error,
     });
   }
@@ -104,15 +108,15 @@ exports.updateUserProfile = async (req, res) => {
   }
 };
 
-exports.getProfile=async(req,res)=>{
-  const user=await User.findById(req.user._id);
-  const userWithoutPassword=user.toObject();
-  delete userWithoutPassword['password'];
+exports.getProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const userWithoutPassword = user.toObject();
+  delete userWithoutPassword["password"];
   return res.status(200).json({
-    success:true,
-    data:userWithoutPassword
-  })
-}
+    success: true,
+    data: userWithoutPassword,
+  });
+};
 
 exports.myposts = async (req, res) => {
   const posts = await Post.find({ author: req.user._id });
@@ -131,24 +135,20 @@ exports.logout = async (req, res) => {
   });
 };
 
-
 //admin
 
-exports.getAllUsers=async (req,res)=>{
+exports.getAllUsers = async (req, res) => {
   try {
-    const data=await User.find();
-    const totalUsers=data.length;
+    const data = await User.find();
+    const totalUsers = data.length;
     return res.status(200).json({
       success: "true",
       totalUsers,
       data,
     });
-
-
   } catch (error) {
     return res.status(500).json({
       error,
     });
-    
   }
-}
+};
