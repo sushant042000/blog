@@ -19,7 +19,7 @@ router.get('/admin/getAllUser',isAuthenticated,isAdmin,getAllUsers);
 
 
 //post
- router.post('/post/create',createPost);
+ router.post('/post/create',isAuthenticated,createPost);
  router.put('/post/update/:id',isAuthenticated,updatePost);
  router.get("/post/mypost",isAuthenticated,myposts);
  router.get("/post/all",allPosts);
