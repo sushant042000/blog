@@ -9,10 +9,25 @@ import Navbar from "./components/Navbar";
 import MyPosts from "./components/MyPosts";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import Navbar2 from "./components/NavBar2";
 function App() {
-  const { isAuthenticated, error } = useSelector((state) => state.user);
-  console.log("in app", isAuthenticated);
-  // <Route path="/myPost" element={ isAuthenticated ? <MyPosts />: <Login/>} />
+  const [authenticated, setAuthenticated] = useState(false);
+  const [token, setToken] = useState();
+  const { isAuthenticated } = useSelector((state) => state.user);
+  const Auth = (token) => {
+    setAuthenticated(true);
+    setToken(token);
+  };
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    token ? Auth(token) : setAuthenticated(false);
+    console.log("token app", token);
+  }, [token]);
+
+  // console.log("token app", token);
 
   return (
     <BrowserRouter>
@@ -23,14 +38,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/addPost" element={<AddPost />} />
         <Route path="/singlePost" element={<PostCard />} />
-        <Route
-          path="/myPost"
-          element={
-            <ProtectedRoute isAuthenticated={isAuthenticated} component={<MyPosts/>}>
-              <MyPosts />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/myPost" element={<MyPosts />} />
       </Routes>
     </BrowserRouter>
   );

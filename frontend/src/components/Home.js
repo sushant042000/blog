@@ -11,7 +11,7 @@ import {
 import { CircularProgress } from "@mui/material";
 const Home = () => {
   const { data, isLoading, error } = useSelector((state) => state.allPost);
-  console.log(data, isLoading, error);
+
   const dispatch = useDispatch();
 
   const fetchData = async () => {
@@ -41,6 +41,7 @@ const Home = () => {
         <div
           style={{
             margin: "10px",
+            marginLeft: "60px",
             display: "flex",
             flexWrap: "wrap",
             alignItems: "center",

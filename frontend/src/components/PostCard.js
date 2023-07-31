@@ -3,10 +3,10 @@ import React from "react";
 import "./PostCard.css";
 
 const PostCard = ({ post }) => {
-   
+  
   return (
     <div className="postCard">
-      <div className="title">{post.title}</div>
+      <div className="title">{post.title} </div>
       <div className="image">
         <img src={post.image.url} alt="Post" />
       </div>

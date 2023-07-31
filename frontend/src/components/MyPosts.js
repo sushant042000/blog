@@ -8,15 +8,16 @@ import { blogApi } from "../api/blogPostApi";
 import PostCard from "./PostCard";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
+import UpdatePostCard from "./UpdatePostCard";
 
 const MyPosts = () => {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const { posts, isLoading, error } = useSelector((state) => state.myPost);
+  
   const fetchData = async () => {
     try {
       dispatch(getMyPostStart());
       const response = await blogApi.getMyPost();
-      
       dispatch(getMyPostSuccess(response.data.posts));
     } catch (error) {
       dispatch(getMyPostFail(error));
@@ -24,12 +25,15 @@ const MyPosts = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    const fetchPosts = async () => {
+      await fetchData();
+    };
+
+    fetchPosts();
   }, []);
 
-  // const myPost = posts && posts.posts ? posts.posts : [];
-  console.log( posts);
-  const myPosts=posts ?posts:[];
+  
+  const myPosts = posts ? posts : [];
 
   return (
     <div className="loding">
@@ -47,7 +51,7 @@ const MyPosts = () => {
           }}
         >
           {myPosts &&
-            myPosts.map((post) => <PostCard key={post._id} post={post} />)}
+            myPosts.map((post) => <UpdatePostCard key={post._id} post={post} />)}
         </div>
       )}
     </div>

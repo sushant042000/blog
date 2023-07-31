@@ -51,6 +51,7 @@ const AddPost = () => {
   };
   return (
     <div className="add-post-container">
+    <h1>Post New Blog</h1>
       <Card sx={{ minWidth: 500 }}>
         <div className="formGroup">
           <TextField
@@ -60,6 +61,7 @@ const AddPost = () => {
             style={{ width: "400px" }}
             onChange={(e) => setTitle(e.target.value)}
           />
+          
         </div>
 
         <div className="formGroup">

@@ -1,15 +1,23 @@
-import React, { Fragment } from 'react'
-import { useSelector } from 'react-redux';
-import { Route, useNavigate } from 'react-router-dom';
+import React, { Fragment, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Route, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const ProtectedRoute = ({isAuthenticated,component}) => {
-    const navigate=useNavigate();
-    if(!isAuthenticated){
-       return navigate('/login');
-
+const ProtectedRoute = ({ authenticated, component }) => {
+  const navigate=useNavigate();
+  useEffect(() => {
+    if (authenticated) {
+      return navigate("/login");
     }
-    console.log("comp",component);
-  return component;
-}
+  }, [authenticated]);
 
-export default ProtectedRoute
+  // const navigate=useNavigate();
+  // if(!authenticated){
+  //    return navigate('/login');
+
+  // }
+  // console.log("comp",component);
+  return component;
+};
+
+export default ProtectedRoute;

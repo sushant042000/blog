@@ -20,9 +20,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("after login==>",isAuthenticated);
-  }, []);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,8 +33,9 @@ const Login = () => {
       const response = await userApi.login(data);
       console.log(response);
       dispatch(loginUserSuccess(response?.data));
+      navigate("/myPost");
     } catch (error) {
-      console.log("error",error);
+      console.log("error", error);
       const { message } = error?.response?.data;
       dispatch(loginUserFailure(message));
     }

@@ -9,5 +9,8 @@ export const userApi = {
   },
   login:async(loginData)=>{
     return await axios.post(`${API_BASE_URL}/login`,loginData);
+  },
+  logout:async()=>{
+    return await axios.get(`${API_BASE_URL}/logout`);
   }
 };
