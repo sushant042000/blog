@@ -9,11 +9,11 @@ const Navbar = () => {
     <header>
       <nav>
         <ul className="navbar">
-          <li><a href="/">Home</a></li>
-          <li><a href="/myPosts">My Posts</a></li>
+          <li><a onClick={()=>navigate('/')}>Home</a></li>
+          <li><a onClick={()=>navigate('/myPost')}>My Posts</a></li>
           <li className="auth-buttons">
-            <a href="/register">Register</a>
-            <a href="/login">Login</a>
+            <a  onClick={()=>navigate('/register')}>Register</a>
+            <a  onClick={()=>navigate('/login')}>Login</a>
           </li>
         </ul>
       </nav>
