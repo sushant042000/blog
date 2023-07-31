@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import PostCard from "./PostCard";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { blogApi } from "../api/blogPostApi";
 import {
@@ -8,14 +8,14 @@ import {
   getAllPostsStart,
   getAllPostsSuccess,
 } from "../strore/slices/allPostSlice";
+import { CircularProgress } from "@mui/material";
 const Home = () => {
-  const {data,isLoading,error}=useSelector((state)=>state.allPost);
-  console.log(data,isLoading,error);
+  const { data, isLoading, error } = useSelector((state) => state.allPost);
+  console.log(data, isLoading, error);
   const dispatch = useDispatch();
 
   const fetchData = async () => {
     try {
-      console.log("try");
       dispatch(getAllPostsStart());
       const response = await blogApi.getAllPosts();
       dispatch(getAllPostsSuccess(response.data));
@@ -23,27 +23,33 @@ const Home = () => {
       dispatch(getAllPostsFail(error));
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, []);
-
 
   // const posts=data.posts
   const posts = data && data.posts ? data.posts : [];
 
   return (
-    <div
-      style={{
-        margin: "10px",
-        display: "flex",
-        flexWrap: "wrap",
-        alignItems: "center",
-      }}
-    >
-      {posts && posts.map((post) => (
-        <PostCard key={post._id} post={post} />
-      ))}
+    <div className="loding">
+      {isLoading ? (
+        <div className="loding">
+          <CircularProgress />
+        </div>
+      ) : (
+        <div
+          style={{
+            margin: "10px",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
+          {posts &&
+            posts.map((post) => <PostCard key={post._id} post={post} />)}
+        </div>
+      )}
     </div>
   );
 };

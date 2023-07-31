@@ -9,9 +9,8 @@ import {
 } from "../strore/slices/userSlices";
 import axios from "axios";
 import { userApi } from "../api/userApi";
-import { useNavigate } from 'react-router-dom';
-import { CircularProgress, TextField } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
+import { Button, CircularProgress, TextField } from "@mui/material";
 
 const LoginSignUp = () => {
   const { userData, isLoading, error } = useSelector((state) => state.user);
@@ -25,7 +24,7 @@ const LoginSignUp = () => {
   const [required, setRequired] = useState("");
 
   const dispatch = useDispatch();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,9 +45,8 @@ const LoginSignUp = () => {
           const response = await userApi.register(formData);
 
           dispatch(registerUserSuccess(response.data));
-          alert("successfully registered ! You can now login")
-          navigate('/login');
-          
+          alert("successfully registered ! You can now login");
+          navigate("/login");
         } catch (error) {
           const { status } = error?.response;
 
@@ -59,7 +57,7 @@ const LoginSignUp = () => {
               : "An error occurred during registration";
             dispatch(registerUserFailure(errorMessage));
           }
-          navigate('/register');
+          navigate("/register");
         }
       }
     } else {
@@ -75,44 +73,47 @@ const LoginSignUp = () => {
       ) : (
         <div>
           <div className="form-group">
-          <TextField
-          id="standard-basic"
-          label="User Name"
-          variant="standard"
-          onChange={(e) => setName(e.target.value)}
-        />
+            <TextField
+              id="standard-basic"
+              label="User Name"
+              variant="standard"
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div className="form-group">
-          <TextField
-          id="standard-basic"
-          label="User Name"
-          variant="standard"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+            <TextField
+              id="standard-basic"
+              label="Email"
+              variant="standard"
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <p className="error">{error}</p>
           </div>
           <div className="form-group">
-            <label className="label">Password</label>
-            <input
-              className="input"
-              type="password"
-              placeholder="Enter password..."
-              onChange={(e) => setPassword(e.target.value)}
-            />
+          <TextField
+          id="standard-basic"
+          label="password"
+          variant="standard"
+          onChange={(e) => setPassword(e.target.value)}
+        />
           </div>
           <div className="form-group">
-            <label className="label">Confirm Password</label>
-            <input
-              className="input"
-              type="password"
-              placeholder="Confirm password..."
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+          <TextField
+          id="standard-basic"
+          label="Confirm Password"
+          variant="standard"
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
           </div>
           <div className="button">
-            <button className="button" type="submit" onClick={handleSubmit}>
-              Register
-            </button>
+          <Button
+          size="small"
+          color="success"
+          variant="contained"
+          onClick={handleSubmit}
+        >
+          Register
+        </Button>
           </div>
           <p className="error">{required}</p>
         </div>

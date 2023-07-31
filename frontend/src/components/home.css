@@ -1,0 +1,9 @@
+.loading{
+    width: 50vw; /* Set the width of the div to 50% of the viewport width */
+    height: 50vh; /* Set the height of the div to 50% of the viewport height */
+    position: fixed;
+    top: 50%; /* Move the top of the div to the center of the viewport vertically */
+    left: 50%; /* Move the left of the div to the center of the viewport horizontally */
+    transform: translate(-50%, -50%); /* Use translate to perfectly center the div */
+    background-color: #f0f0f0; 
+}

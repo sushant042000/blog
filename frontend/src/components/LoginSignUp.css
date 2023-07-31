@@ -13,8 +13,9 @@
 
   .error{
     color: red;
-    font-weight: lighter;
+    font-weight: bold;
     font-size: smaller;
+    text-align: center;
   }
   
   .form-group {
