@@ -3,10 +3,8 @@ const cloudinary = require("cloudinary");
 
 exports.createPost = async (req, res) => {
   try {
-    // console.log("here",req.body);
     const { title, description } = req.body;
-    // const id = req.user._id;
-    const id = "25r326feyt3f";
+    const id = req.user._id;
 
     const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
       folder: "blog_images",
