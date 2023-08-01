@@ -13,5 +13,11 @@ export const blogApi = {
   },
   getMyPost:async()=>{
      return await axios.get(`${API_BASE_URL}/myPost`);
-  }
+  },
+  deleteMyPost:async(id)=>{
+    return await axios.put(`${API_BASE_URL}/delete/${id}`);
+ },
+ updateMyPost:async(id,data)=>{
+  return await axios.put(`${API_BASE_URL}/update/${id}`,data);
+}
 };

@@ -2,7 +2,7 @@ const express=require("express");
 const router=express.Router()
 const { register, loginUser, updateUserProfile, logout, myposts, getAllUsers, getProfile } = require("../controller/userController");
 
-const { createPost, updatePost, allPosts } = require("../controller/postsController");
+const { createPost, updatePost, allPosts, deletePost } = require("../controller/postsController");
 const { isAuthenticated, isAdmin } = require("../middleware/Auth");
 
 
@@ -18,9 +18,10 @@ router.get('/myProfile',isAuthenticated,getProfile);
 router.get('/admin/getAllUser',isAuthenticated,isAdmin,getAllUsers);
 
 
-//post
+//posts
  router.post('/post/create',isAuthenticated,createPost);
  router.put('/post/update/:id',isAuthenticated,updatePost);
+ router.put('/post/delete/:id',isAuthenticated,deletePost);
  router.get("/post/mypost",isAuthenticated,myposts);
  router.get("/post/all",allPosts);
 

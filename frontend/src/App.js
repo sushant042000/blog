@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import Navbar2 from "./components/NavBar2";
+import BlogDetail from "./components/BlogDetail";
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState();
@@ -39,6 +40,7 @@ function App() {
         <Route path="/addPost" element={<AddPost />} />
         <Route path="/singlePost" element={<PostCard />} />
         <Route path="/myPost" element={<MyPosts />} />
+        <Route path="/blogDetail/:id" element={<BlogDetail />} />
       </Routes>
     </BrowserRouter>
   );

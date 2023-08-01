@@ -47,17 +47,31 @@ exports.createPost = async (req, res) => {
 exports.updatePost = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("body",req.body)
 
-    const newUserData = {
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
+      folder: "blog_images",
+      width: 150,
+      crop: "scale",
+    });
+
+
+    const dataToUpdate = {
       title: req.body.title,
-      content: req.body.content,
+      content: req.body.description,
+      image: {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      },
     };
-
-    const updatedData = await Post.findByIdAndUpdate({ _id: id }, newUserData, {
+    
+    const updatedData = await Post.findByIdAndUpdate({ _id: id }, dataToUpdate, {
       new: true,
       runValidators: true,
       useFindAndModify: false,
     });
+
+    // console.log("updated",updatedData)
 
     return res.status(200).json({
       success: "true",
@@ -77,6 +91,32 @@ exports.allPosts = async (req, res) => {
     return res.status(200).json({
       success: "true",
       posts,
+    });
+  } catch (error) {
+    return res.status(200).json({
+      error,
+    });
+  }
+};
+
+exports.deletePost = async (req, res) => {
+  try {
+    console.log("htr")
+    const { id } = req.params;
+    console.log("id",id)
+    const isExist=await Post.findOne({_id:id});
+
+    if(!isExist){
+      return res.status(404).json({
+        message:"post not found"
+      });
+    }
+
+    const data = await Post.findByIdAndDelete({_id:id});
+
+    return res.status(200).json({
+      success: "true",
+      message:"post deleted successfully"
     });
   } catch (error) {
     return res.status(200).json({
