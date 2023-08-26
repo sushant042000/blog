@@ -9,11 +9,16 @@ const postSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  category: {
+    type: String,
+    required: true,
+  },
   author: {
     type: mongoose.Schema.ObjectId,
     ref: "user",
     required: true,
   },
+
   image: {
     public_id: {
       type: String,
