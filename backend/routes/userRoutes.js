@@ -6,8 +6,6 @@ const { createPost, updatePost, allPosts, deletePost } = require("../controller/
 const { isAuthenticated, isAdmin } = require("../middleware/Auth");
 
 
-
-
 router.post('/register',register);
 router.post('/login',loginUser);
 router.put('/updateProfile',isAuthenticated,updateUserProfile);
@@ -24,10 +22,6 @@ router.get('/admin/getAllUser',isAuthenticated,isAdmin,getAllUsers);
  router.put('/post/delete/:id',isAuthenticated,deletePost);
  router.get("/post/mypost",isAuthenticated,myposts);
  router.get("/post/all",allPosts);
-
-
-
-
 
 
 module.exports=router;
