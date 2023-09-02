@@ -17,18 +17,27 @@ import MyPosts from "./Pages/MyPosts";
 import UpdatePost from "./Pages/UpdatePost";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { hasCookies } from "./Store/Slices/userSlice";
+import { hasCookies, loginUserStart } from "./Store/Slices/userSlice";
+import { userApi } from "./API/api";
 
 function App() {
   const [token, setToken] = useState("");
   const dispatch = useDispatch();
 
+  const fetchUserData = async () => {
+    dispatch(loginUserStart());
+    const res = await userApi.getMyProfile();
+    dispatch(hasCookies(res.data.data));
+  };
+
   useEffect(() => {
     const token = Cookies.get("token");
     setToken(token);
     if (token) {
-      dispatch(hasCookies());
+      fetchUserData();
+      
     }
+    
   }, [token]);
 
   return (

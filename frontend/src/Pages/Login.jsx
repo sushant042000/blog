@@ -23,8 +23,8 @@ const Login = () => {
     try {
       dispatch(loginUserStart);
       const response = await userApi.login(loginData);
-
-      dispatch(loginUserSuccess(response.data));
+       
+      dispatch(loginUserSuccess(response.data.data));
 
       navigate("/");
     } catch (err) {

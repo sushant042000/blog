@@ -3,42 +3,50 @@ import "./setting.css";
 import Sidebar from "../components/Sidebar";
 import { userApi } from "../API/api";
 import { ThreeDots } from "react-loader-spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { hasCookies } from "../Store/Slices/userSlice";
 
 const Setting = () => {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [userData, setUserData] = useState();
-  const [password, setPassword] = useState();
-  const [isLoading, setLoading] = useState(true);
-  const fetchProfile = async () => {
-    const res = await userApi.getMyProfile();
-    setLoading(false);
-    setUserData(res.data.data);
-  };
-  useEffect(() => {
-    fetchProfile();
-  }, []);
+  const dispatch=useDispatch();
+  let { isAuthenticated, userData } = useSelector((state) => state.user);
+  const [name, setName] = useState(userData.name);
+  const [email, setEmail] = useState(userData.email);
 
-  useEffect(() => {
-    if (userData) {
-      setName(userData.name);
-      setEmail(userData.email);
+  const [profileImage, setprofile] = useState(userData.profileImage.url);
+
+  const [isLoading, setLoading] = useState(false);
+
+  const handleInputProfile = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      setprofile(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
     }
-  }, [userData]);
+  };
 
-  const handleUpdate=async (e)=>{
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    const dataToUpdate={
+    const dataToUpdate = {
       name,
       email,
-      password
-    }
-    
-    const res=await userApi.updateMyProfile(dataToUpdate);
-    console.log("====>",res.data)
+      profileImage,
+    };
 
-    
-  }
+    try {
+      setLoading(true);
+      const res = await userApi.updateMyProfile(dataToUpdate);
+      const resp = await userApi.getMyProfile();
+      dispatch(hasCookies(resp.data.data));
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="settings">
@@ -63,10 +71,7 @@ const Setting = () => {
             <form className="settingsForm">
               <label>Profile Picture</label>
               <div className="settingsPP">
-                <img
-                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dXNlcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60"
-                  alt=""
-                />
+                <img src={profileImage} alt="" />
                 <label htmlFor="fileInput">
                   <i className="settingsPPIcon far fa-user-circle"></i>{" "}
                 </label>
@@ -75,6 +80,7 @@ const Setting = () => {
                   type="file"
                   style={{ display: "none" }}
                   className="settingsPPInput"
+                  onChange={handleInputProfile}
                 />
               </div>
               <label>Username</label>
@@ -83,7 +89,7 @@ const Setting = () => {
                 placeholder="Sushant"
                 name="name"
                 value={name}
-                onChange={(e)=>setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
               />
               <label>Email</label>
               <input
@@ -91,11 +97,14 @@ const Setting = () => {
                 placeholder="sushantbailkar2504@gmail.com"
                 name="email"
                 value={email}
-                onChange={(e)=>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
-              <label>Password</label>
-              <input type="password" placeholder="Password" name="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
-              <button className="settingsSubmitButton" type="submit" onClick={handleUpdate}>
+
+              <button
+                className="settingsSubmitButton"
+                type="submit"
+                onClick={handleUpdate}
+              >
                 Update
               </button>
             </form>

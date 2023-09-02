@@ -21,6 +21,16 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "user",
   },
+  profileImage: {
+    public_id: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+  },
   
   createdAt: {
     type: Date,

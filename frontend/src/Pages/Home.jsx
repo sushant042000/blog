@@ -23,9 +23,10 @@ const Home = () => {
     try {
       dispatch(getAllPostStart());
       const response = await blogApi.getAllPosts();
-      console.log(response.data)
+      
 
       dispatch(getAllPostSuccess(response.data.posts));
+      
     } catch (err) {
       dispatch(getAllPostFailure(err));
     }

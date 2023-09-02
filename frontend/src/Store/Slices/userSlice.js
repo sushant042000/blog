@@ -46,9 +46,11 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isAuthenticated = false;
       state.error = null;
+      state.userData=null;
     },
-    hasCookies(state){
+    hasCookies(state,action){
       state.isLoading = false;
+      state.userData=action.payload;
       state.isAuthenticated = true;
       state.error = null;
 

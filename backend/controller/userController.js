@@ -1,5 +1,7 @@
 const Post = require("../models/postModel");
 const User = require("../models/userModel");
+const cloudinary = require("cloudinary");
+``
 
 const asyncErrorHandler = require("../utils/asyncErrorHandler");
 const CustomError = require("../utils/custumError");
@@ -7,11 +9,25 @@ const CustomError = require("../utils/custumError");
 
 
 exports.register = asyncErrorHandler(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password ,profileImage} = req.body;
+   if(!profileImage){
+    next(new CustomError("profile image is required",400));
+   }
+  const myProfile = await cloudinary.v2.uploader.upload(profileImage, {
+    folder: "profileImages",
+    width: 150,
+    crop: "scale",
+  });
+
   const user = await User.create({
     name,
     email,
     password,
+    profileImage:{
+      public_id: myProfile.public_id,
+      url: myProfile.secure_url,
+    }
+
   });
 
   const data = await user.save();
@@ -50,6 +66,7 @@ exports.loginUser = asyncErrorHandler(async (req, res, next) => {
   };
   return res.status(200).cookie("token", token, options).json({
     message: "success",
+    data:user
   });
 });
 
@@ -57,17 +74,22 @@ exports.loginUser = asyncErrorHandler(async (req, res, next) => {
 
 exports.updateUserProfile = asyncErrorHandler(async (req, res) => {
   const id = req.user._id;
-  const { name, email, password } = req.body;
+  const { name, email, profileImage } = req.body;
+
+  const myProfile = await cloudinary.v2.uploader.upload(profileImage, {
+    folder: "profileImages",
+    width: 150,
+    crop: "scale",
+  });
 
   const data = {
     name,
     email,
-    password,
+    profileImage: {
+      public_id: myProfile.public_id,
+      url: myProfile.secure_url,
+    },
   };
-
-  if (!password) {
-    delete data["password"];
-  }
 
   const updatedData = await User.findByIdAndUpdate(id, data, {
     new: true,
