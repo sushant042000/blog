@@ -1,22 +1,19 @@
 const Post = require("../models/postModel");
 const cloudinary = require("cloudinary");
-const ErrorHandler = require("../utils/custumError");
+
 const asyncErrorHandler = require("../utils/asyncErrorHandler");
+const CustomError = require("../utils/custumError");
 
 
 
 exports.createPost = asyncErrorHandler(async (req, res, next) => {
-  const requiredFields = ["title", "description", "image"];
-  const missingFields = requiredFields.filter((field) => !req.body[field]);
-
-  if (missingFields.length > 0) {
-    const errorMessage = `${missingFields.join(",")} is required`;
-
-    next(new ErrorHandler(errorMessage, 400));
-  }
   const { title, description, category, image } = req.body;
 
   const id = req.user._id;
+
+  if (!image) {
+    return next(new CustomError("image is required", 400));
+  }
 
   const myCloud = await cloudinary.v2.uploader.upload(image, {
     folder: "blog_images",
@@ -44,29 +41,20 @@ exports.createPost = asyncErrorHandler(async (req, res, next) => {
 
 
 
-
 exports.updatePost = asyncErrorHandler(async (req, res, next) => {
   const { id } = req.params;
-  const requiredFields = ["title", "description", "image"];
-  const missingFields = requiredFields.filter((field) => !req.body[field]);
-
-  if (missingFields.length > 0) {
-    const errorMessage = `${missingFields.join(",")} is required`;
-
-    next(new ErrorHandler(errorMessage, 400));
-  }
 
   const { image, description, title } = req.body;
+
+  if (!image) {
+    return next(new CustomError("image is required", 400));
+  }
 
   const myCloud = await cloudinary.v2.uploader.upload(image, {
     folder: "blog_images",
     width: 150,
     crop: "scale",
   });
-
-  if (!myCloud) {
-    next(new ErrorHandler("Internal server Error", 500));
-  }
 
   const dataToUpdate = {
     title: title,
@@ -91,8 +79,7 @@ exports.updatePost = asyncErrorHandler(async (req, res, next) => {
 
 
 
-
-exports.allPosts = asyncErrorHandler(async (req, res) => {
+exports.allPosts = asyncErrorHandler(async (req, res, next) => {
   const posts = await Post.find();
 
   return res.status(200).json({
@@ -103,14 +90,14 @@ exports.allPosts = asyncErrorHandler(async (req, res) => {
 
 
 
-
 exports.deletePost = asyncErrorHandler(async (req, res, next) => {
   const { id } = req.params;
 
   const isExist = await Post.findOne({ _id: id });
 
   if (!isExist) {
-    next(new ErrorHandler("Post not found", 404));
+    const err = new CustomError("Post not found with this id", 404);
+    next(err);
   }
 
   const data = await Post.findByIdAndDelete({ _id: id });
