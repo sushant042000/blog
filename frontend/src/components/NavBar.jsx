@@ -6,19 +6,20 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserSuccess } from "../Store/Slices/userSlice";
+import defaultProfile from "../assets/defaultProfile.jpg";
+import toast from "react-hot-toast";
 
 const NavBar = ({ token, setToken }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
-  let { isAuthenticated,userData } = useSelector((state) => state.user);
+
+  let { isAuthenticated, userData } = useSelector((state) => state.user);
   const handleLogout = async (e) => {
-    Cookies.remove("token");
+    await Cookies.remove("token");
+    
     setToken("");
     dispatch(logoutUserSuccess());
-
-    
-   
+    toast("👍 Logout success !")
   };
 
   return (
@@ -52,11 +53,17 @@ const NavBar = ({ token, setToken }) => {
         </ul>
       </div>
       <div className="topRight">
-        {isAuthenticated  ? (
+        {isAuthenticated ? (
           <img
             onClick={() => navigate("/setting")}
             className="topImg"
-            src={userData ? userData.profileImage.url : ''}
+            src={
+              userData
+                ? userData.profileImage
+                  ? userData.profileImage.url
+                  : defaultProfile
+                : ""
+            }
             alt=""
           />
         ) : (

@@ -3,6 +3,7 @@ import "./write.css";
 import { blogApi } from "../API/post";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import toast from "react-hot-toast";
 
 const Write = ({ post }) => {
   const navigate = useNavigate();
@@ -37,12 +38,12 @@ const Write = ({ post }) => {
       // console.log(response.data);
       setLoading(false);
       if (response.data) {
-        alert("post added successfully!");
+        toast("✔ New Post Added")
         navigate("/myPosts");
       }
     } catch (error) {
       setLoading(false);
-      alert("failed to add new Post");
+      toast(" 😢 failed !")
     }
   };
 

@@ -12,8 +12,10 @@ import {
 import { ThreeDots } from "react-loader-spinner";
 
 const MyPosts = () => {
-  const { isLoading } = useSelector((state) => state.myPosts);
+  const { isLoading, posts } = useSelector((state) => state.myPosts);
+
   const [myPost, setMyPosts] = useState([]);
+
   const dispatch = useDispatch();
 
   const fetchMyPosts = async () => {
@@ -26,7 +28,7 @@ const MyPosts = () => {
       }
     } catch (error) {
       console.log(error);
-      dispatch(getMypostFail(error))
+      dispatch(getMypostFail(error));
     }
   };
 
@@ -46,8 +48,9 @@ const MyPosts = () => {
           wrapperClassName=""
           visible={true}
         />
+      ) : posts && posts.length ? (
+        posts.map((post) => <Post key={post._id} y post={post} user={true} />)
       ) : (
-        myPost.length ? myPost.map((post) => <Post key={post._id} y post={post} user={true} />) :
         <h2>No Posts Available</h2>
       )}
     </div>

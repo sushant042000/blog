@@ -3,8 +3,12 @@ import "./UpdatePost.css";
 import { blogApi } from "../API/post";
 
 import { ThreeDots } from "react-loader-spinner";
+import { useDispatch } from "react-redux";
+import { getMypostSuccess } from "../Store/Slices/myPostSlice";
+import toast from "react-hot-toast";
 
 const UpdatePost = ({ post, handleUpdateComplete }) => {
+  const dispatch=useDispatch();
   
   const [title, setTitle] = useState(post.title);
   const [category, setCategory] = useState(post.category);
@@ -33,8 +37,11 @@ const UpdatePost = ({ post, handleUpdateComplete }) => {
     try {
       setLoading(true);
       await blogApi.updateMyPost(post._id, updatePostData);
+      const res=await blogApi.getMyPost();
+      dispatch(getMypostSuccess(res.data.posts));
+
       setLoading(false);
-      alert("Post updated successfully");
+      toast("👍 post Updated !")
       handleUpdateComplete();
     } catch (error) {
       alert("update failed");

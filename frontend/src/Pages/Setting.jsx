@@ -5,14 +5,19 @@ import { userApi } from "../API/api";
 import { ThreeDots } from "react-loader-spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { hasCookies } from "../Store/Slices/userSlice";
+import defaultProfile from "../assets/defaultProfile.jpg"
 
 const Setting = () => {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   let { isAuthenticated, userData } = useSelector((state) => state.user);
   const [name, setName] = useState(userData.name);
   const [email, setEmail] = useState(userData.email);
 
-  const [profileImage, setprofile] = useState(userData.profileImage.url);
+  const [profileImage, setprofile] = useState(
+    userData.profileImage
+      ? userData.profileImage.url
+      : defaultProfile
+  );
 
   const [isLoading, setLoading] = useState(false);
 

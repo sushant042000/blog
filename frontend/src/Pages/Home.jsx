@@ -16,25 +16,21 @@ import { ThreeDots } from "react-loader-spinner";
 const Home = () => {
   const dispatch = useDispatch();
   const { allPosts, isLoading } = useSelector((state) => state.allPosts);
-  const [posts, setPosts] = useState(allPosts);
-  
+  const [posts, setPosts] = useState();
 
   const fetchData = async () => {
     try {
       dispatch(getAllPostStart());
       const response = await blogApi.getAllPosts();
-      
 
       dispatch(getAllPostSuccess(response.data.posts));
-      
     } catch (err) {
       dispatch(getAllPostFailure(err));
     }
   };
   useEffect(() => {
-    setPosts(allPosts);
-     
     fetchData();
+    setPosts(allPosts);
   }, [posts]);
 
   return (

@@ -10,6 +10,8 @@ import {
 import { userApi } from "../API/api";
 import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import toast from "react-hot-toast";
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,10 +25,11 @@ const Login = () => {
     try {
       dispatch(loginUserStart);
       const response = await userApi.login(loginData);
-       
+
       dispatch(loginUserSuccess(response.data.data));
 
       navigate("/");
+      toast("😍 login success");
     } catch (err) {
       dispatch(loginUserFailure(err.response.data.message));
       alert(err.response.data.message);

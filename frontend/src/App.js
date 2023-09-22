@@ -1,6 +1,7 @@
 import "./App.css";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import  { Toaster } from 'react-hot-toast';
 
 import NavBar from "./components/NavBar";
 import SinglePost from "./components/SinglePost";
@@ -19,6 +20,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { hasCookies, loginUserStart } from "./Store/Slices/userSlice";
 import { userApi } from "./API/api";
+import Protected from "./components/Protected";
 
 function App() {
   const [token, setToken] = useState("");
@@ -35,9 +37,7 @@ function App() {
     setToken(token);
     if (token) {
       fetchUserData();
-      
     }
-    
   }, [token]);
 
   return (
@@ -45,15 +45,29 @@ function App() {
       <NavBar token={token} setToken={setToken} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/write" element={<Write />} />
+
         <Route path="/single/:id" element={<SinglePost />} />
         <Route path="/posts" element={<Posts />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/setting" element={<Setting />} />
-        <Route path="/myPosts" element={<MyPosts />} />
-        <Route path="/update/:id" element={<UpdatePost />} />
+        <Route
+          path="/setting"
+          element={<Protected token={token} component={<Setting />} />}
+        />
+        <Route
+          path="/myPosts"
+          element={<Protected token={token} component={<MyPosts />} />}
+        />
+        <Route
+          path="/update/:id"
+          element={<Protected token={token} component={<UpdatePost />} />}
+        />
+        <Route
+          path="/write"
+          element={<Protected token={token} component={<Write />} />}
+        />
       </Routes>
+      <Toaster />
     </BrowserRouter>
   );
 }

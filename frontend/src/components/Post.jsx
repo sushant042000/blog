@@ -5,6 +5,7 @@ import { blogApi } from "../API/post";
 import { useNavigate } from "react-router-dom";
 import UpdatePost from "../Pages/UpdatePost";
 import {} from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const Post = ({ post, user }) => {
  
@@ -18,7 +19,7 @@ const Post = ({ post, user }) => {
     try {
       setLoading(true);
        await blogApi.deleteMyPost(post._id);
-      alert('post deleted')
+      toast(" 😒 Post deleted !")
       setLoading(false);
       navigate('/');
       
