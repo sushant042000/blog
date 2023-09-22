@@ -63,13 +63,13 @@ const Post = ({ post, user }) => {
             )}
 
             <div className="postCats">
-              <span className="postCat">Music</span>
+              <span className="postCat">{post.category}</span>
             </div>
             <span className="postTitle" >{post.title}</span>
             <hr />
-            <span className="postDate">{post.createdAt}</span>
+            <span className="postDate">{post.createdAt.slice(0,10)}</span>
           </div>
-          <p className="postDesc" onClick={showSinglePost}>{post.content}</p>
+          <p className="postDesc" onClick={showSinglePost}>{post.content.slice(0,150)}...</p>
         </div>
       )}
     </div>
